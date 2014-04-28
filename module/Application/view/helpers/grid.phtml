@@ -1,0 +1,208 @@
+<?php // echo $this->headScript()->prependFile($this->basePath() . '/js/jquery.dataTables.min.js')            ?>
+<div role="grid" class="dataTables_wrapper" id="dyntable_wrapper">
+    <div id="dyntable_length" class="dataTables_length">
+        <label> Show <select onchange="applyLimit(this.value)" name="dyntable_length" size="1" aria-controls="dyntable">
+                <option value="2" <?php echo ($grid['per_page'] == 2) ? "selected='selected'" : '' ?>>2</option>
+                <option value="5" <?php echo ($grid['per_page'] == 5) ? "selected='selected'" : '' ?>>5</option>
+                <option value="10" <?php echo ($grid['per_page'] == 10) ? "selected='selected'" : '' ?>>10</option>
+                <option value="20" <?php echo ($grid['per_page'] == 20) ? "selected='selected'" : '' ?>>20</option>
+            </select> entries </label>
+    </div>
+    <div class="dataTables_filter" id="dyntable_filter">
+        <!--<label>Search: <input type="text" aria-controls="dyntable"></label>-->
+    </div>
+    <table id="dyntable" class="table table-bordered dataTable" aria-describedby="dyntable_info">
+        <colgroup>
+            <col style="align: center;" class="con0">
+            <col class="con1">
+            <col class="con0">
+            <col class="con1">
+            <col class="con0">
+            <col class="con1">
+        </colgroup>
+        <thead>
+        <tr role="row">
+            <?php foreach ($columns as $key => $column): ?>
+                <?php $order = ($grid['sort'] == $column && $grid['order'] == 'DESC') ? 'ASC' : 'DESC'; ?>
+                <th class="head0 sorting" colspan="1" style="">
+                    <a href="<?php echo $url . '?' . getUri($grid, array(
+                            'sort'  => $column,
+                            'order' => $order
+                        )) ?>"><?php echo $key ?></a></th>
+            <?php endforeach; ?>
+        </tr>
+        <form>
+            <tr role="row" id="filters">
+                <?php foreach ($columns as $key => $column): ?>
+                    <th class="head0 sorting" colspan="1" style="">
+                        <input type="text" onkeyup="applyFilter(event, this.value)" name="filter[<?php echo $column ?>]" value="<?php echo isset($grid['filters'][$column]) ? $grid['filters'][$column] : "" ?>"/>
+                    </th>
+                <?php endforeach; ?>
+            </tr>
+        </form>
+        </thead>
+        <tbody role="alert" aria-live="polite" aria-relevant="all">
+        <?php foreach ($grid['data'] as $data): ?>
+            <tr class="gradeA odd">
+                <?php foreach ($columns as $column): ?>
+                    <td class=""><?php echo $data->$column; ?></td>
+                <?php endforeach; ?>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+    <div class="dataTables_info" id="dyntable_info">Showing <?php echo $grid['count'] == 0 ? 0 : (($grid['page'] - 1) * $grid['per_page']) + 1 ?> to <?php echo ($grid['pages'] == $grid['page']) ? $grid['count'] : $grid['page'] * $grid['per_page'] ?> of <?php echo $grid['count'] ?> entries</div>
+
+    <div class="dataTables_paginate paging_full_numbers" id="dyntable_paginate">
+        <a href="<?php echo ($grid['page'] == 1) ? 'javascript:void(0)' : $url . "?" . getUri($grid, array('page' => 1)) ?>" class="first paginate_button <?php echo ($grid['page'] == 1) ? "paginate_button_disabled" : "" ?>" tabindex="0" id="dyntable_first">First</a>
+        <a href="<?php echo ($grid['page'] == 1) ? 'javascript:void(0)' : $url . "?" . getUri($grid, array('page' => $grid['page'] - 1)) ?>" class="paginate_button <?php echo ($grid['page'] == 1) ? "paginate_button_disabled" : "" ?>" tabindex="0" id="dyntable_first">Previous</a>
+        <span>
+            <?php for ($i = 1; $i <= $grid['pages']; $i++): ?>
+                <a href="<?php echo $url . "?" . getUri($grid, array('page' => $i)) ?>" class="<?php echo ($grid['page'] == $i) ? "paginate_active" : "paginate_button" ?>" tabindex="0"><?php echo $i ?></a>
+            <?php endfor; ?>
+        </span>
+        <a href="<?php echo ($grid['pages'] == $grid['page']) ? 'javascript:void(0)' : $url . "?" . getUri($grid, array('page' => $grid['page'] + 1)) ?>" class="paginate_button <?php echo ($grid['page'] == $grid['pages']) ? "paginate_button_disabled" : "" ?>" tabindex="0" id="dyntable_first">Next</a>
+        <a href="<?php echo ($grid['pages'] == $grid['page']) ? 'javascript:void(0)' : $url . "?" . getUri($grid, array('page' => $grid['pages'])) ?>" class="paginate_button <?php echo ($grid['page'] == $grid['pages']) ? "paginate_button_disabled" : "" ?>" tabindex="0" id="dyntable_first">Last</a>
+    </div>
+</div><input type="hidden" id="per_page" value="<?php echo $grid['per_page'] ?>"/>
+<input type="hidden" id="order" value="<?php echo $grid['order'] ?>"/>
+<input type="hidden" id="sort" value="<?php echo $grid['sort'] ?>"/>
+<input type="hidden" id="page" value="<?php echo $grid['page'] ?>"/>
+<input type="hidden" id="filter" value="<?php echo $grid['filterQuery'] ?>"/>
+<script>
+    function applyLimit(value) {
+        jQuery("#per_page").val(value);
+        var uri = composeURI();
+        window.location.href = "<?php echo $url ?>?" + uri;
+    }
+
+    function composeURI() {
+        var per_page = jQuery("#per_page").val();
+        var order = jQuery("#order").val();
+        var sort = jQuery("#sort").val();
+        var page = jQuery("#page").val();
+        var filter = jQuery("#filter").val();
+
+        return 'page=1&order=' + order + '&sort=' + sort + '&per_page=' + per_page + filter;
+    }
+
+    function applyFilter(e, val) {
+        if (e.keyCode == 13) {
+            var filter = new Array();
+            var filterQuery = '';
+            jQuery('tr#filters input').each(function () {
+                filter[jQuery(this).attr('name')] = jQuery(this).val();
+            })
+            for (var key in filter) {
+                if (filter[key] != '') {
+                    filterQuery += '&' + key + '=' + filter[key];
+                }
+            }
+            jQuery('#filter').val(filterQuery);
+            var uri = composeURI();
+            window.location.href = "<?php echo $url ?>?" + uri;
+        }
+    }
+</script>
+
+<?php
+
+function getUri($grid, array $options = NULL)
+{
+    $uri = isset($options['page']) ? "page={$options['page']}" : "page={$grid['page']}";
+    $uri .= isset($options['per_page']) ? "&per_page={$options['per_page']}" : "&per_page={$grid['per_page']}";
+    $uri .= isset($options['sort']) ? "&sort={$options['sort']}" : "&sort={$grid['sort']}";
+    $uri .= isset($options['order']) ? "&order={$options['order']}" : "&order={$grid['order']}";
+    foreach ($grid['filters'] as $key => $value)
+    {
+        $uri .= "&filter[$key]=$value";
+    }
+
+    return $uri;
+}
+
+?>
+
+<style>
+    .dataTables_wrapper {
+        position: relative;
+    }
+
+    .dataTables_length, .dataTables_info {
+        background: none repeat scroll 0 0 #EEEEEE;
+        border: 1px solid #DDDDDD;
+        font-size: 11px;
+        padding: 10px;
+    }
+
+    .dataTables_length {
+        border-bottom: 0 none;
+    }
+
+    .dataTables_info {
+        border-top: 0 none;
+    }
+
+    .dataTables_filter {
+        position: absolute;
+        right: 10px;
+        top: 12px;
+    }
+
+    .dataTables_filter input {
+        margin-left: 10px;
+        width: 150px;
+    }
+
+    .dataTables_paginate {
+        bottom: 10px;
+        position: absolute;
+        right: 10px;
+    }
+
+    .dataTables_paginate .first, .dataTables_paginate .previous, .dataTables_paginate .paginate_active, .dataTables_paginate .paginate_button, .dataTables_paginate .next, .dataTables_paginate .last {
+        -moz-border-bottom-colors: none;
+        -moz-border-left-colors: none;
+        -moz-border-right-colors: none;
+        -moz-border-top-colors: none;
+        background: none repeat scroll 0 0 #EEEEEE;
+        border-color: #BBBBBB #BBBBBB #BBBBBB -moz-use-text-color;
+        border-image: none;
+        border-style: solid solid solid none;
+        border-width: 1px 1px 1px 0;
+        cursor: pointer;
+        font-size: 11px;
+        padding: 5px 10px;
+    }
+
+    .dataTables_paginate span:hover {
+        background-color: #DDDDDD;
+    }
+
+    .dataTables_paginate .first {
+        border-left: 1px solid #BBBBBB;
+    }
+
+    .dataTables_paginate .paginate_active {
+        background: none repeat scroll 0 0 #FFFFFF;
+    }
+
+    .dataTables_paginate .paginate_button:hover {
+        background: none repeat scroll 0 0 #EEEEEE;
+    }
+
+    .dataTables_paginate .paginate_button_disabled {
+        background: none repeat scroll 0 0 #EEEEEE;
+        color: #BBBBBB;
+        cursor: default;
+    }
+
+    .dataTables_length select {
+        width: auto !important;
+    }
+
+    .stdform input {
+        border: 1px solid #BBBBBB;
+        padding: 7px 5px;
+    }
+</style>

@@ -1,0 +1,20 @@
+<?php
+
+$title = 'User Registration';
+$this->headTitle($title);
+?><h1><?php echo $this->escapeHtml($title); ?></h1><?
+//$form = $this->form;
+//$form->setAttribute('action', $this->url('registration'));
+//$form->prepare();
+echo $this->formLabel($form->get('Username'));
+echo $this->formElement($form->get('Username'));
+echo $this->formElementErrors($form->get('Username'));
+echo $this->formLabel($form->get('email'));
+echo $this->formElement($form->get('email'));
+echo $this->formElementErrors($form->get('email'));
+echo $this->formLabel($form->get('password'));
+echo $this->formElement($form->get('password'));
+echo $this->formElementErrors($form->get('password'));
+echo $this->formLabel($form->get('timezone'));
+echo $this->formElement($form->get('timezone'));
+echo $this->formElementErrors($form->get('timezone'));

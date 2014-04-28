@@ -1,0 +1,24 @@
+<div class="widgetcontent">
+    If you are using the db provided with the project you can use umair.abid@coeus-solutions.de/123465 to login
+
+
+    <?php $form->prepare(); ?>
+    <?php echo $this->form()->openTag($form); ?>
+
+    <?php foreach ($form as $element): ?>
+        <div class="par control-group <?php echo count($element->getMessages()) > 0 ? 'error' : '' ?>">
+            <label for="inputInfo" class="control-label"><?php echo $element->getOption('label'); ?></label>
+
+            <div class="controls">
+                <?php echo $this->formElement($element); ?>
+                <span class="help-inline"><?php echo $this->formElementErrors($element); ?></span>
+            </div>
+        </div><!--par-->
+    <?php endforeach; ?>
+    <div style="color: red"><?php echo count($errors != 0) ? implode(',', $errors) : '' ?></div>
+
+    <p class="stdformbutton">
+        <button class="btn btn-primary">Submit Button</button>
+        <button class="btn" type="reset">Reset Form</button>
+    </p>
+</div>

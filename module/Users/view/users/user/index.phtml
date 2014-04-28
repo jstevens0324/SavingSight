@@ -1,0 +1,8 @@
+<?php
+
+echo $this->grid($grid, array(
+    'ID'         => 'id',
+    'First Name' => 'first_name',
+    'Last Name'  => 'last_name',
+    'Email'      => 'email',
+), $this->url('user', array('action' => 'index'))) ?>
