@@ -21,15 +21,15 @@ class AuthController extends AbstractActionController
             {
                 $params      = $this->request->getPost();
                 $dbAdapter   = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
-                $authAdapter = new AuthAdapter($dbAdapter, 'users', 'email', 'password');
+                $authAdapter = new AuthAdapter($dbAdapter, 'user', 'email', 'password');
                 $authAdapter->setIdentity($params['username']);
-                $authAdapter->setCredential($params['password']);
+                $authAdapter->setCredential(md5($params['password']));
                 $authService = new AuthService(NULL, $authAdapter);
                 $result      = $authService->authenticate();
                 if ($result->isValid())
                 {
                     $authService->getStorage()->write($authAdapter->getResultRowObject());
-                    $this->redirect()->toRoute('user');
+                    $this->redirect()->toRoute('home');
                 }
                 else
                 {

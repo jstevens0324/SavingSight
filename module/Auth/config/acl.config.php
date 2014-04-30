@@ -55,7 +55,6 @@ return array(
             'resource'  => 'Auth',
             'privilege' => array( //controller:action
                                   'auth:logout',
-                                  'auth:test',
             ),
         ),
         array(
@@ -66,8 +65,17 @@ return array(
             ),
             'resource'  => 'Users',
             'privilege' => array(
-                'user:add',
-                'user:index'
+                'user:update'
+            ),
+        ),
+        array(
+            'deny'      => array(),
+            'allow'     => array(
+                'guest'
+            ),
+            'resource'  => 'Users',
+            'privilege' => array(
+                'user:register'
             ),
         ),
     ),

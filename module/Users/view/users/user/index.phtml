@@ -1,8 +1,18 @@
-<?php
-
-echo $this->grid($grid, array(
-    'ID'         => 'id',
-    'First Name' => 'first_name',
-    'Last Name'  => 'last_name',
-    'Email'      => 'email',
-), $this->url('user', array('action' => 'index'))) ?>
+<table class="table">
+    <tr>
+        <th>Title</th>
+        <th>Artist</th>
+        <th>&nbsp;</th>
+    </tr>
+    <tr>
+        <td><?php echo $this->escapeHtml($user->first_name); ?></td>
+        <td><?php echo $this->escapeHtml($user->last_name); ?></td>
+        <td>
+            <a href="<?php echo $this->url('user',
+                array(
+                    'action' => 'add',
+                    'id'     => $user->id
+                ));?>">Edit</a>
+        </td>
+    </tr>
+</table>

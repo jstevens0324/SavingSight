@@ -2,13 +2,16 @@
 
 namespace Users;
 
-use Zend\Db\ResultSet\ResultSet;
-use Zend\Db\TableGateway\TableGateway;
+
 use Users\Model\User;
 use Users\Model\UserTable;
 
+use Zend\Db\ResultSet\ResultSet;
+use Zend\Db\TableGateway\TableGateway;
+use Zend\ModuleManager\Feature\ServiceProviderInterface;
+use Zend\Db\Adapter\Adapter as DbAdapter;
 
-class Module
+class Module implements ServiceProviderInterface
 {
 
     public function getAutoloaderConfig()
@@ -31,19 +34,20 @@ class Module
     {
         return array(
             'factories' => array(
-                'User' => function($sm) {
-                    $tableGateway = $sm->get('UserTableGateway');
-                    $table = new UserTable($tableGateway);
-                    return $table;
-                },
+                'Users\Model\UserTable' =>  function($sm) {
+                        $tableGateway = $sm->get('UserTableGateway');
+                        $table = new UserTable($tableGateway);
+                        return $table;
+                    },
                 'UserTableGateway' => function ($sm) {
-                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
-                    $resultSetPrototype = new ResultSet();
-                    $resultSetPrototype->setArrayObjectPrototype(new User());
-                    return new TableGateway('users', $dbAdapter, null, $resultSetPrototype);
-                },
+                        $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                        $resultSetPrototype = new ResultSet();
+                        $resultSetPrototype->setArrayObjectPrototype(new User());
+                        return new TableGateway('user', $dbAdapter, null, $resultSetPrototype);
+                    },
             ),
         );
+
     }
 
 }

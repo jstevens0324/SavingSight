@@ -27,7 +27,7 @@ class Login extends Form
                 'id'   => 'username',
             ),
             'options'    => array(
-                'label' => 'Username'
+                'label' => 'Email'
             )
         ));
 

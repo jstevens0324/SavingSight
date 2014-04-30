@@ -4,8 +4,9 @@ namespace Users\Form;
 
 use Users\Model;
 use Zend\Form\Form;
+use Zend\InputFilter\InputFilter;
 
-class Users extends Form
+class Register extends Form
 {
 
     protected $user;
@@ -87,27 +88,6 @@ class Users extends Form
                 'label' => 'Password',
             ),
 
-        ));
-        $this->add(array(
-            'type'       => 'Zend\Form\Element\Password',
-            'name'       => 'passwordCheck',
-            'required'   => 'required',
-            'attributes' => array(
-                'id'   => 'passwordCheck',
-                'size' => '32',
-            ),
-            'validators' => array(
-                array(
-                    'name'    => 'Identical',
-                    'options' => array(
-                        'token' => 'password',
-                        // name of first password field
-                    ),
-                ),
-            ),
-            'options'    => array(
-                'label' => 'Verify Password ',
-            ),
         ));
 
         $this->add(array(
