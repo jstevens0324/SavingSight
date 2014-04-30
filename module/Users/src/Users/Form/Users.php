@@ -101,7 +101,6 @@ class Users extends Form
                     'name'    => 'Identical',
                     'options' => array(
                         'token' => 'password',
-                        // name of first password field
                     ),
                 ),
             ),
