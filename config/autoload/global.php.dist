@@ -2,7 +2,7 @@
 return array(
     'db'              => array(
         'driver'         => 'Pdo',
-        'dsn'            => 'mysql:dbname=DATABASE NAME GOES HERE;host=DATABASE HOST GOES HERE',
+        'dsn'            => 'mysql:dbname=savingsight;host=DATABASE HOST GOES HERE',
         'driver_options' => array(
             PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\''
         ),
