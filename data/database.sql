@@ -18,5 +18,5 @@ CREATE TABLE `user` (
   `timezone` varchar(45) DEFAULT NULL,
   `timezone_offset` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 

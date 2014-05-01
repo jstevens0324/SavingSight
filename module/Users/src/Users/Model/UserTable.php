@@ -2,14 +2,19 @@
 
 namespace Users\Model;
 
-use Application\Model\DbModel;
 use Zend\Db\TableGateway\TableGateway;
 
 class UserTable
 {
     protected $tableGateway;
+
     protected $timezone;
+
     protected $offset;
+
+    protected $created_date;
+
+    protected $updated_date;
 
     public function __construct(TableGateway $tableGateway)
     {
@@ -21,15 +26,18 @@ class UserTable
 
         $this->setTimezone($user->timezone);
         $this->setOffset();
+
         $data = array(
-            'username'        => $user->username,
-            'first_name'      => $user->first_name,
-            'last_name'       => $user->last_name,
-            'email'           => $user->email,
-            'password'        => md5($user->password),
-            'role'            => $user->role,
-            'status'          => 'active',
-            'timezone'        => $this->timezone,
+            'username' => $user->username,
+            'first_name' => $user->first_name,
+            'last_name' => $user->last_name,
+            'email' => $user->email,
+            'password' => md5($user->password),
+            'role' => $user->role,
+            'status' => 'active',
+            'created_date' => $user->created_date,
+            'updated_date' => $user->updated_date,
+            'timezone' => $this->timezone,
             'timezone_offset' => $this->offset,
         );
 
@@ -59,9 +67,9 @@ class UserTable
 
     public function getUser($id)
     {
-        $id     = (int)$id;
+        $id = (int)$id;
         $rowset = $this->tableGateway->select(array('id' => $id));
-        $row    = $rowset->current();
+        $row = $rowset->current();
         if (!$row)
         {
             throw new \Exception("Could not find row $id");
@@ -117,7 +125,6 @@ class UserTable
 
         }
     }
-
 }
 
 ?>

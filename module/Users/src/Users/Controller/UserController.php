@@ -2,11 +2,11 @@
 
 namespace Users\Controller;
 
+use Users\Form\Register;
 use Users\Form\Users;
 use Users\Model\User;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-use Users\Form\Register;
 
 class UserController extends AbstractActionController
 {
@@ -21,13 +21,13 @@ class UserController extends AbstractActionController
         if ($authService->hasIdentity())
         {
             $userRow = $authService->getIdentity();
-            $user    = new \Users\Model\User($userRow);
+            $user = new \Users\Model\User($userRow);
         }
         else
         {
             $userArray['first_name'] = 'Guest';
-            $userArray['role']       = 'guest';
-            $user                    = new \Users\Model\User;
+            $userArray['role'] = 'guest';
+            $user = new \Users\Model\User;
             $user->exchangeArray($userArray);
         }
 
@@ -45,7 +45,8 @@ class UserController extends AbstractActionController
                 'action' => 'index'
             ));
         }
-        $user = $this->getUserTable()->getUser($id);
+        $table = $this->getUserTable();
+        $user = $table->getUser($id);
 
         $form = new Users();
         $form->bind($user);
@@ -58,15 +59,14 @@ class UserController extends AbstractActionController
 
             if ($form->isValid())
             {
-                $this->getUserTable()->saveUser($form->getData());
-
-                // Redirect to list of users
+                $user->updated_date = date("Y-m-d H:i:s");
+                $table->saveUser($form->getData());
                 return $this->redirect()->toRoute('user');
             }
         }
 
         return array(
-            'id'   => $id,
+            'id' => $id,
             'form' => $form,
         );
     }
@@ -74,7 +74,6 @@ class UserController extends AbstractActionController
     public function registerAction()
     {
         $form = new Register();
-        //$form->get('submit')->setValue('Add');
 
         $request = $this->getRequest();
         if ($request->isPost())
@@ -88,7 +87,6 @@ class UserController extends AbstractActionController
                 $user->exchangeArray($form->getData());
                 $this->getUserTable()->saveUser($user);
 
-                // Redirect to list of users
                 return $this->redirect()->toRoute('auth');
             }
         }
@@ -100,7 +98,7 @@ class UserController extends AbstractActionController
     {
         if (!$this->userTable)
         {
-            $sm              = $this->getServiceLocator();
+            $sm = $this->getServiceLocator();
             $this->userTable = $sm->get('Users\Model\UserTable');
         }
         return $this->userTable;

@@ -24,6 +24,21 @@ class Register extends Form
         ));
 
         $this->add(array(
+            'name' => 'created_date',
+            'attributes' => array(
+                'type' => 'hidden',
+                'value' => date("Y-m-d H:i:s")
+            ),
+        ));
+
+        $this->add(array(
+            'name' => 'updated_date',
+            'attributes' => array(
+                'type' => 'hidden',
+            ),
+        ));
+
+        $this->add(array(
             'name' => 'username',
             'required' => 'required',
             'attributes' => array(
