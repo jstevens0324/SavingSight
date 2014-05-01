@@ -63,15 +63,17 @@
         <div class="container">
             <div id="header">
                 <?php
-                $t = time();
-                $z = date("Z", $t);
-                $offset = $this->user()->timezone_offset;
+                date_default_timezone_set("GMT");
+                $date = gmdate("H:i:s A");
+                $testDateStr = strtotime($date);
+                $finalDate = date("F d, Y H:i:s A", strtotime($this->escapeHtml(($this->user()->timezone_offset), $testDateStr)));
+                //echo $finalDate . "<br>";
                 ?>
                 <b>Welcome! </b><?php echo $this->user()->first_name . ' ' . $this->user()->last_name ?><br>
 
                 <?php if ($this->user()->role != 'guest'): ?>
                     <b>Email: </b><?php echo $this->user()->email ?><br>
-                    <b>Current Time: </b><?php echo date("h:i A", $t - $offset - $z + 3600); ?><br>
+                    <b>Current Time: </b><?php echo $finalDate; ?><br>
                 <?php endif; ?>
             </div>
 

@@ -101,19 +101,19 @@ class UserTable
         switch ($this->timezone)
         {
             case 'CDT':
-                $this->offset = '21600';
+                $this->offset = '-5 hour';
                 break;
             case 'EDT':
-                $this->offset = '25200';
+                $this->offset = '-6 hour';
                 break;
             case 'PDT':
-                $this->offset = '14400';
+                $this->offset = '-3 hour';
                 break;
             case 'MDT':
-                $this->offset = '18000';
+                $this->offset = '-4 hour';
                 break;
             default:
-                $this->offset = '21600';
+                $this->offset = '-5 hour';
 
         }
     }

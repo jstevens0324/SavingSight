@@ -18,11 +18,11 @@ class Module
 
     public function attachAcl(MvcEvent $e)
     {
-        $application   = $e->getApplication();
-        $sm            = $application->getServiceManager();
+        $application = $e->getApplication();
+        $sm = $application->getServiceManager();
         $sharedManager = $application->getEventManager()->getSharedManager();
 
-        $router  = $sm->get('router');
+        $router = $sm->get('router');
         $request = $sm->get('request');
 
         $matchedRoute = $router->match($request);
@@ -59,7 +59,7 @@ class Module
                 'Acl' => function ($sm)
                     {
                         $config = $sm->get('Config');
-                        $acl    = new \Auth\Plugin\MyAcl($config['acl']);
+                        $acl = new \Auth\Plugin\MyAcl($config['acl']);
                         return $acl;
                     }
             ),

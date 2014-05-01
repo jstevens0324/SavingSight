@@ -15,13 +15,13 @@ class User extends AbstractHelper
         if ($authService->hasIdentity())
         {
             $userRow = $authService->getIdentity();
-            $user    = new \Users\Model\User($userRow);
+            $user = new \Users\Model\User($userRow);
         }
         else
         {
             $userArray['first_name'] = 'Guest';
-            $userArray['role']       = 'guest';
-            $user                    = new \Users\Model\User;
+            $userArray['role'] = 'guest';
+            $user = new \Users\Model\User;
             $user->exchangeArray($userArray);
         }
         return $user;
